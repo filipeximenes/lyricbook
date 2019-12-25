@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 import sys
 from datetime import datetime
 import json
@@ -68,6 +69,9 @@ def write_metadate(metadata):
 
 
 def backup():
+    if not os.path.exists(BACKUPS_PATH):
+        os.makedirs(BACKUPS_PATH)
+
     metadata = read_metadata()
     write_json_file(f"{BACKUPS_PATH}/{NOW}.json", metadata)
 
