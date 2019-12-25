@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 import requests
 
 
+BACKUPS_PATH = "backups"
 METADATA_FILE_NAME = "lyrics.json"
 SOURCES_FILE_NAME = "sources.json"
 NOW = datetime.now().isoformat()
@@ -66,7 +67,14 @@ def write_metadate(metadata):
     return write_json_file(METADATA_FILE_NAME, metadata)
 
 
+def backup():
+    metadata = read_metadata()
+    write_json_file(f"{BACKUPS_PATH}/{NOW}.json", metadata)
+
+
 def update_song(song_url):
+    backup()
+
     metadata = read_metadata()
 
     url_hash = hash_source_url(song_url)
@@ -77,6 +85,8 @@ def update_song(song_url):
 
 
 def process_lyrics():
+    backup()
+
     metadata = read_metadata()
 
     song_urls = read_json_file(SOURCES_FILE_NAME)
